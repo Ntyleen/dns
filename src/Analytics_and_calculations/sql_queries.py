@@ -2,21 +2,24 @@ from src.Database_manage.table_class import Cities, Products, Branches, Sales
 from src.utils.time_script import time_stamp
 
 from sqlalchemy import func, extract, Integer, case
-
+from loguru import logger
 
 @time_stamp
 def get_top_branches_by_sales(sess, limit=10):
-    top_branches_by_sales = (
-        sess.query(Branches.Наименование.label("Название_филиала"),
-                   func.sum(Sales.Количество).label("Количество_продаж"))
-        .join(Sales, Branches.Ссылка == Sales.Филиал)
-        .filter(~Branches.Наименование.op('SIMILAR TO')('%(склад|Склад|cклад|Cклад)%'))
-        .group_by(Branches.Наименование)
-        .order_by(func.sum(Sales.Количество).desc())
-        .limit(limit)
-    ).all()
-    return top_branches_by_sales
-
+    try:
+        top_branches_by_sales = (
+            sess.query(Branches.Наименование.label("Название_филиала"),
+                       func.sum(Sales.Количество).label("Количество_продаж"))
+            .join(Sales, Branches.Ссылка == Sales.Филиал)
+            .filter(~Branches.Наименование.op('SIMILAR TO')('%(склад|Склад|cклад|Cклад)%'))
+            .group_by(Branches.Наименование)
+            .order_by(func.sum(Sales.Количество).desc())
+            .limit(limit)
+        ).all()
+        logger.info("Запрос на получение т")
+        return top_branches_by_sales
+    except Exception as e:
+        logger
 
 @time_stamp
 def get_top_branches_by_sales_value(sess, limit=10):

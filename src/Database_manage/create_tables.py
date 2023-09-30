@@ -6,11 +6,12 @@ from connect import create_connection_to_database
 
 
 @time_stamp
-def create_tables(tables, engine=None):
+def create_tables(tables, engine=None):     #   Модуль создания таблиц
     if engine is None:
         engine = create_connection_to_database()
 
     for table in tables:
+        logger.info(f"Начато создание таблицы {table.__tablename__}...")
         try:
             table.__table__.create(bind=engine, checkfirst=True)
             logger.info(f"Таблица {table.__tablename__} создана.")

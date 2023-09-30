@@ -7,10 +7,12 @@ from sqlalchemy import create_engine
 from src.utils.time_script import time_stamp
 
 
-def load_chunk(args):  #
+#   Модуль многопроцессорной загрузки данных в базу данных
+def load_chunk(args):  # Фуникция загрузки части данных
     chunk, model, db_url = args
     engine = create_engine(db_url)
     try:
+        logger.info(f"Загрузка части размером {chunk.shape[0]} строк в {model.__tablename__}.")
         with engine.connect() as connection:
             chunk.to_sql(model.__tablename__, engine, if_exists='append', index=False)
         return chunk.shape[0]
@@ -19,7 +21,8 @@ def load_chunk(args):  #
 
 
 @time_stamp
-def load_file_multiprocces(data_path, model):
+def load_file_multiprocces(data_path, model):  # Функция многопроцессорной загрузки файла
+    logger.info(f"Начинается многопроцессорная загрузка из {data_path}...")
     db_url = create_connection_to_database(return_url=True)
     total_rows_loaded = 0
     chunk_size = 100000

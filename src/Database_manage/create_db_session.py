@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import text
 
 
-def create_db_session():
+def create_db_session():    #   Создание сессии и установка локали
     engine = create_connection_to_database()
     session = sessionmaker(bind=engine)
     sess = session()

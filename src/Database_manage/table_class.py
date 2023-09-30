@@ -4,9 +4,13 @@ from sqlalchemy.orm.relationships import Relationship
 
 base = declarative_base()
 
+    # Определение таблиц классами
 
 class Sales(base):
     __tablename__ = 't_sales'
+
+    #   Определение стобцов и их типов
+
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     Период = Column(DateTime)  # "period"
     Филиал = Column(String(100), ForeignKey('t_branches.Ссылка'), index=True)  # "link_on_shop"
