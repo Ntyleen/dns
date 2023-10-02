@@ -1,8 +1,9 @@
-import pandas as pd
+import os
 from loguru import logger
 
 from src.Database_manage.create_dataframe import create_dataframe_by
 from src.utils.time_script import time_stamp
+
 
 # Функция для выполнения запросов к базе данных и сохранения результатов в CSV-файлы или возвращения их как DataFrame.
 #
@@ -15,7 +16,6 @@ from src.utils.time_script import time_stamp
 
 @time_stamp
 def queries_to_csv(sess, query_funcs, column_mapping, save_to_csv=True):
-    results = {}
 
     for query_func in query_funcs:
         data = query_func(sess)
@@ -24,19 +24,18 @@ def queries_to_csv(sess, query_funcs, column_mapping, save_to_csv=True):
             logger.info(f"Данные успешно загружены в DataFrame для {query_func.__name__}.")
 
         except Exception as e:
-            logger.error(f"Ошибка при создании DataFrame для {query_func.__name__}.")
+            logger.error(f"Ошибка при создании DataFrame для {query_func.__name__}: {e}.")
             continue
 
         if save_to_csv:
             try:
-                csv_filename = f"{query_func.__name__}.csv"
+                csv_filename = os.path.join("results", f"{query_func.__name__}.csv") #f"../results/{query_func.__name__}.csv"
                 df.to_csv(csv_filename, index=False)
                 logger.info(f"Результат сохранен в {csv_filename}")
 
             except Exception as e:
                 logger.error(f"Ошибка при сохранении в {csv_filename}: {e}")
         else:
-            results[query_func.__name__] = df
             logger.info(f"Данные сохранены во фрейм")
     if not save_to_csv:
-        return results
+        return df

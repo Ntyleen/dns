@@ -1,12 +1,11 @@
 from src.utils.time_script import time_stamp
 
 from loguru import logger
-from connect import create_connection_to_database
-
+from src.Database_manage.connect import create_connection_to_database
 
 
 @time_stamp
-def create_tables(tables, engine=None):     #   Модуль создания таблиц
+def create_tables(tables, engine=None):  # Модуль создания таблиц
     if engine is None:
         engine = create_connection_to_database()
 

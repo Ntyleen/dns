@@ -1,9 +1,9 @@
-from create_tables import create_connection_to_database
+from src.Database_manage.connect import create_connection_to_database
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import text
 
 
-def create_db_session():    #   Создание сессии и установка локали
+def create_db_session():  # Создание сессии и установка локали
     engine = create_connection_to_database()
     session = sessionmaker(bind=engine)
     sess = session()

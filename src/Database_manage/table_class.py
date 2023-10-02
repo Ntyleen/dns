@@ -4,7 +4,8 @@ from sqlalchemy.orm.relationships import Relationship
 
 base = declarative_base()
 
-    # Определение таблиц классами
+
+# Определение таблиц классами
 
 class Sales(base):
     __tablename__ = 't_sales'
@@ -53,5 +54,3 @@ class ProductsClasses(base):
     id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     Номенклатура = Column(String(500), ForeignKey('t_products.Ссылка'))
     КлассТовара = Column(String(50))
-
-

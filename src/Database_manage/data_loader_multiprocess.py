@@ -2,7 +2,8 @@ from loguru import logger
 
 from src.utils.time_script import time_stamp
 
-from multiprocess_load import load_file_multiprocces
+from src.Database_manage.multiprocess_load import load_file_multiprocces
+
 
 # Загрузка всех данных из указанных файлов в соответствующие таблицы базы данных
 #

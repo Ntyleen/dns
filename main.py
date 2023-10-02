@@ -1,11 +1,50 @@
+from loguru import logger
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+from src.utils.time_script import time_stamp
+from src.Database_manage.create_db_session import create_db_session
+from src.Database_manage.data_loader_multiprocess import load_all_data
+from src.Database_manage.table_class import Sales, ProductsClasses, Products, Cities, Branches
+from src.Database_manage.create_tables import create_tables
+from src.Database_manage.mapping import data_mapping, column_mapping
+from src.Analytics_and_calculations.analytics import queries_to_csv
+from src.Analytics_and_calculations.Calcs import product_to_csv, load_classified_products
+from src.Analytics_and_calculations.visualisation import vis_to_queries
+from src.Analytics_and_calculations.sql_queries import (get_top_sales_hour_and_day, get_top_cities_by_sales,
+                                                        get_top_branches_by_sales, get_top_branches_by_sales_value,
+                                                        get_top_products_by_sales_at_branches,
+                                                        get_top_products_by_sales_at_storages,
+                                                        get_sales_by_hour, get_sales_by_day)
 
 
-# Press the green button in the gutter to run the script.
+@time_stamp
+def main():
+    logger.info("Начато выполнение задания")
+    try:
+        tables = [Cities, Products, Branches, Sales, ProductsClasses]
+
+        create_tables(tables)
+        load_all_data(data_mapping)
+
+        sess = create_db_session()
+
+        queries_to_csv(sess,
+                       [get_top_branches_by_sales, get_top_branches_by_sales_value,
+                        get_top_products_by_sales_at_branches,
+                        get_top_products_by_sales_at_storages, get_top_cities_by_sales, get_top_sales_hour_and_day,
+                        get_sales_by_day, get_sales_by_hour], column_mapping)
+
+        df_line = queries_to_csv(sess, [get_sales_by_hour], column_mapping, False)
+        vis_to_queries(df_line, "Час", "Количество_продаж", "Продаж в каждом часе")
+
+        df_bar = queries_to_csv(sess, [get_sales_by_day], column_mapping, False)
+        vis_to_queries(df_bar, "День_недели", "Количество_продаж", "Продаж по дням недели", "bar")
+
+        product_to_csv(sess, column_mapping["classify_products"])
+
+        load_classified_products()
+    except Exception as e:
+        logger.error(f"Ошибка при выполнении одного из модулей: {e}")
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()

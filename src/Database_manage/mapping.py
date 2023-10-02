@@ -1,10 +1,10 @@
-from table_class import Products, Cities, Branches, Sales
+from src.Database_manage.table_class import Products, Cities, Branches, Sales
 
 data_mapping = {
-    "../data/t_products.csv": Products,
-    "../data/t_cities.csv": Cities,
-    "../data/t_branches.csv": Branches,
-    "../data/t_sales.csv": Sales
+    "./src/data/t_products.csv": Products,
+    "./src/data/t_cities.csv": Cities,
+    "./src/data/t_branches.csv": Branches,
+    "./src/data/t_sales.csv": Sales
 }
 
 column_mapping = {
@@ -16,8 +16,5 @@ column_mapping = {
     "get_top_branches_by_sales_value": ["Название_филиала", "Количество_продаж"],
     "get_sales_by_day": ["День_недели", "Количество_продаж"],
     "get_sales_by_hour": ["Час", "Количество_продаж"],
-    "classify_products": ["Номенклатура", "Объем_продаж"]
+    "classify_products": ["Номенклатура", "КлассТовара"]
 }
-
-
-

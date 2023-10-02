@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 
 
-def create_connection_to_database(return_url=False):    #   Создание подключения к бд и получение данных из окружения
+def create_connection_to_database(return_url=False):  # Создание подключения к бд и получение данных из окружения
     db_username = os.environ.get('DB_USERNAME')
     db_password = os.environ.get('DB_PASSWORD')
     db_host = os.environ.get('DB_HOST')

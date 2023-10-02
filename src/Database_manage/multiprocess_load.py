@@ -1,6 +1,6 @@
 import pandas as pd
 
-from connect import create_connection_to_database
+from src.Database_manage.connect import create_connection_to_database
 from loguru import logger
 from multiprocessing import Pool
 from sqlalchemy import create_engine
